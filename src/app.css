@@ -1,1 +1,34 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+@import "inter-ui/inter.css";
+
+@theme {
+    --default-font-family: "Inter Variable", "Inter", system-ui, sans-serif;
+    --default-font-feature-settings: "frac", "cv08", "cv05", "cv04", "cv11";
+    --font-sans: var(--default-font-family);
+}
+
+@custom-variant hidden (&:where([hidden] *));
+
+@layer components {
+    .sidebar {
+        @apply p-4 bg-gray-100 dark:bg-gray-900 h-screen w-xs flex flex-col justify-stretch forced-colors:border-r gap-1;
+    }
+    .sidebar-btn {
+        @apply hover:bg-emerald-500/10 hover:text-emerald-700 hover:dark:text-emerald-400 p-1 px-2 text-[1.05rem] rounded text-left cursor-pointer text-gray-800 dark:text-gray-200 font-medium;
+    }
+    .sidebar-btn.active {
+        @apply bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-semibold;
+    }
+    .icon {
+        @apply align-[-0.25em] inline-block fill-current icon-auto;
+    }
+}
+
+@utility icon-auto {
+    width: 1em;
+    height: 1em;
+}
+
+@utility icon-* {
+    font-size: calc(var(--spacing) * --value(integer, [integer]));
+}

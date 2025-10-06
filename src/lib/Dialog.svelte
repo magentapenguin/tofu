@@ -1,0 +1,30 @@
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+
+	interface Props {
+		open?: boolean;
+		onClose?: (reason: string) => void;
+		children: Snippet;
+		title: string | Snippet;
+	}
+	let { open = $bindable(false), children, onClose, title }: Props = $props();
+	function _close(reason: string) {
+		open = false;
+		onClose?.(reason);
+	}
+	
+</script>
+<div class="fixed inset-0 bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-2 m-5 z-50 rounded-lg" hidden={!open} role="dialog" aria-modal="true">
+	<div class="text-2xl pb-1 mb-1 -mx-2 px-2 border-b border-gray-200 dark:border-gray-800 font-semibold">
+		{#if typeof title === 'string'}
+			{title}
+		{:else}
+			{@render title()}
+		{/if}
+		<button class="float-right cursor-pointer" onclick={() => _close('button')} aria-label="Close dialog"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="icon align-baseline"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M183.1 137.4C170.6 124.9 150.3 124.9 137.8 137.4C125.3 149.9 125.3 170.2 137.8 182.7L275.2 320L137.9 457.4C125.4 469.9 125.4 490.2 137.9 502.7C150.4 515.2 170.7 515.2 183.2 502.7L320.5 365.3L457.9 502.6C470.4 515.1 490.7 515.1 503.2 502.6C515.7 490.1 515.7 469.8 503.2 457.3L365.8 320L503.1 182.6C515.6 170.1 515.6 149.8 503.1 137.3C490.6 124.8 470.3 124.8 457.8 137.3L320.5 274.7L183.1 137.4z"/></svg></button>
+	</div>
+    <div>
+        {@render children()}
+    </div>
+</div>
+<div class="fixed inset-0 bg-black/40 z-40" onclick={() => _close('backdrop')} aria-hidden="true"></div>
