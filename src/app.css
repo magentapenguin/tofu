@@ -19,6 +19,15 @@
     .sidebar-btn.active {
         @apply bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-semibold;
     }
+    .btn {
+        @apply cursor-pointer p-1 px-2 rounded bg-emerald-500/50 not-dark:text-emerald-950 hover:bg-emerald-600 active:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50 font-medium;
+    }
+    .link {
+        @apply text-emerald-600 underline hover:underline-offset-1 underline-offset-2 font-medium;
+    }
+    .input {
+        @apply p-1 px-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-emerald-500 focus:outline-2 focus:outline-offset-0 focus:ring-0;
+    }
     .icon {
         @apply align-[-0.25em] inline-block fill-current icon-auto;
     }
