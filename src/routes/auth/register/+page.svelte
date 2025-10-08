@@ -1,7 +1,22 @@
 <script lang="ts">
 	import { enhance } from '$app/forms'
-	import { PUBLIC_TURNSTILE_SITEKEY } from '$env/static/public';
-	import type { ActionData, SubmitFunction } from './$types'
+	import { PUBLIC_HCAPTCHA_SITEKEY } from '$env/static/public';
+	import type { ActionData, SubmitFunction } from './$types';
+	import { hCaptchaLoader } from '@hcaptcha/loader';
+
+
+	let promise = hCaptchaLoader({ sentry: false });
+	let hcaptcha_element: HTMLDivElement;
+	promise.then(() => {
+		hcaptcha.render(hcaptcha_element, {
+			sitekey: PUBLIC_HCAPTCHA_SITEKEY,
+			theme: 'dark',
+		});
+	}).catch((e) => {
+		hcaptcha_element.innerHTML = 'Error loading hCaptcha';
+		console.error(e);
+	});
+
 	interface Props {
 		form: ActionData
 	}
@@ -13,19 +28,6 @@
 			update()
 			loading = false
 		}
-	}
-	// @ts-ignore
-	if (typeof window !== 'undefined' && window.turnstile !== undefined) {
-		// @ts-ignore
-		window.turnstile.ready(() => {
-		// @ts-ignore
-			window.turnstile.render('#turnstile', {
-				sitekey: PUBLIC_TURNSTILE_SITEKEY,
-				callback: (token: string) => {
-					
-				}
-			})
-		})
 	}
 </script>
 
@@ -44,8 +46,10 @@
 			{form?.message}
 		</div>
 	{/if}
-	<div class="col-span-2" id="turnstile"></div>
-	<button class="btn col-span-2" type="submit">Register</button>
+	<div class="col-span-2" bind:this={hcaptcha_element}>
+		Loading...
+	</div>
+	<button class="btn col-span-2" type="submit" disabled={loading}>Register</button>
     <div class="col-span-2">
         Already have an account? <a class="link" href="/auth/login">Login here</a>.
     </div>
