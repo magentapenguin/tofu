@@ -23,6 +23,7 @@ export const actions: Actions = {
 		const formData = await request.formData()
         const email = formData.get('email') as string
         const password = formData.get('password') as string
+        const hcaptchaToken = formData.get('h-captcha-response') as string
         // simple validation
         if (!email || !password) {
             return fail(400, { message: 'Email and password are required', success: false })
@@ -31,7 +32,7 @@ export const actions: Actions = {
         if (!validEmail) {
             return fail(400, { message: 'Invalid email address', success: false })
         }
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password, options: { captchaToken: hcaptchaToken } })
         if (error || !data.session) {
             return fail(400, { message: error?.message ?? 'Login failed', success: false })
         }

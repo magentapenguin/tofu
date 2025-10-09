@@ -24,6 +24,7 @@ export const actions: Actions = {
         const email = formData.get('email') as string
         const password = formData.get('password') as string
         const confirmPassword = formData.get('confirm-password') as string
+        const hcaptchaToken = formData.get('h-captcha-response') as string
         // check if passwords match
         if (password !== confirmPassword) {
             return fail(400, { message: 'Passwords do not match', success: false })
@@ -36,7 +37,7 @@ export const actions: Actions = {
         if (!validEmail) {
             return fail(400, { message: 'Invalid email address', success: false })
         }
-        const { data, error } = await supabase.auth.signUp({ email, password })
+        const { data, error } = await supabase.auth.signUp({ email, password, options: { captchaToken: hcaptchaToken } })
         if (error || !data.user) {
             return fail(400, { message: error?.message ?? 'Registration failed', success: false })
         }
