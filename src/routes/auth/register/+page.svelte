@@ -1,24 +1,35 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { PUBLIC_HCAPTCHA_SITEKEY } from '$env/static/public';
+	import { onMount } from 'svelte';
+	import posthog from 'posthog-js';
 	import type { ActionData, SubmitFunction } from './$types';
 	import { hCaptchaLoader } from '@hcaptcha/loader';
 
 	let promise = hCaptchaLoader({ sentry: false });
 	let hcaptcha_element: HTMLElement | undefined = $state();
-	$effect(() => {
-		if (hcaptcha_element === undefined) return;
-		hcaptcha_element.innerHTML = 'Loading hCaptcha...';
+	onMount(() => {
+		if (hcaptcha_element === undefined) return console.error('hcaptcha_element is undefined');
 		promise
 			.then(() => {
+				hcaptcha_element!.innerHTML = ''; // Clear "Loading..." text
 				hcaptcha.render(hcaptcha_element!, {
 					sitekey: PUBLIC_HCAPTCHA_SITEKEY,
-					theme: 'dark'
+					theme: 'dark',
+					"error-callback": () => {
+						posthog.capture('captcha-failed')
+					},
+					"expired-callback": () => {
+						posthog.capture('captcha-expired')
+					},
+					callback: (token: string) => {
+						posthog.capture('captcha-success')
+					}
 				});
 			})
 			.catch((e) => {
-				hcaptcha_element!.innerHTML = 'Error loading hCaptcha';
 				console.error(e);
+				hcaptcha_element!.innerHTML = 'Error loading hCaptcha';
 			});
 	});
 
@@ -31,6 +42,10 @@
 		loading = true;
 		return async ({ update }) => {
 			update();
+			// reset hCaptcha
+			if (hcaptcha_element !== undefined && typeof hcaptcha !== 'undefined') {
+				hcaptcha.reset();
+			}
 			loading = false;
 		};
 	};
@@ -64,7 +79,7 @@
 			{form?.message}
 		</div>
 	{/if}
-	<div class="col-span-2" bind:this={hcaptcha_element}></div>
+	<div class="col-span-2" bind:this={hcaptcha_element}>Loading hCaptcha...</div>
 	<button class="btn col-span-2" type="submit" disabled={loading}>Register</button>
 	<div class="col-span-2">
 		Already have an account? <a class="link" href="/auth/login">Login here</a>.

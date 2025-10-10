@@ -37,7 +37,8 @@ export const actions: Actions = {
         if (!validEmail) {
             return fail(400, { message: 'Invalid email address', success: false })
         }
-        const { data, error } = await supabase.auth.signUp({ email, password, options: { captchaToken: hcaptchaToken } })
+        const requestOrigin = url.origin
+        const { data, error } = await supabase.auth.signUp({ email, password, options: { captchaToken: hcaptchaToken, emailRedirectTo: `${requestOrigin}/auth/confirm` } })
         if (error || !data.user) {
             return fail(400, { message: error?.message ?? 'Registration failed', success: false })
         }
