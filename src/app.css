@@ -31,6 +31,9 @@
     .icon {
         @apply align-[-0.25em] inline-block fill-current icon-auto;
     }
+    .hr {
+        @apply border-t border-gray-300 dark:border-gray-700;
+    }
 }
 
 @utility icon-auto {
