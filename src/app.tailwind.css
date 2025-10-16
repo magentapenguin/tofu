@@ -23,7 +23,7 @@
         @apply cursor-pointer p-1 px-2 rounded bg-emerald-500/50 not-dark:text-emerald-950 hover:bg-emerald-600 active:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50 font-medium;
     }
     .link {
-        @apply text-emerald-600 underline hover:underline-offset-1 underline-offset-2 font-medium;
+        @apply text-emerald-600 underline underline-offset-3 font-medium;
     }
     .input {
         @apply p-1 px-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-emerald-500 focus:outline-2 focus:outline-offset-0 focus:ring-0;
@@ -32,13 +32,21 @@
         @apply align-[-0.25em] inline-block fill-current icon-auto;
     }
     .hr {
-        @apply border-t border-gray-300 dark:border-gray-700;
+        @apply border-b border-gray-300 dark:border-gray-700;
     }
 }
 
 @utility icon-auto {
-    width: 1em;
     height: 1em;
+    width: 1em;
+}
+@utility icon-h {
+    height: 1em;
+    width: auto;
+}
+@utility icon-w {
+    height: auto;
+    width: 1em;
 }
 
 @utility icon-* {

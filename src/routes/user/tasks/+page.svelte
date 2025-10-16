@@ -11,5 +11,5 @@
 		<div>test</div>
 	</Dialog>
 {/if}
-<Task id="1" title="Test Task" onChange={(completed) => console.log('Task completed:', completed)} />
-<Task id="2" title="Another Task" syncing={true} />
+<Task id="1" title="Test Task" onChange={(completed) => console.log('Task completed:', completed)} description="This is a test task." />
+<Task id="2" title="Another Task" syncing={true} description="This is another test task." />
