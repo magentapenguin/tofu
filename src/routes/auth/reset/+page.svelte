@@ -49,21 +49,6 @@
 			loading = false;
 		};
 	};
-	let social_login_error = $state<string | null>(null);
-	async function socialLogin(provider: string) {
-		const response = await fetch('/auth/login/social', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ provider })
-		});	
-		if (response.ok) {
-			const data = await response.json();
-			window.location.href = data.url;
-		} else {
-			const errorData = await response.json();
-			social_login_error = errorData.message;
-		}
-	}
 </script>
 
 <form
@@ -73,47 +58,11 @@
 >
 	<label for="email">Email</label>
 	<input class="input" autocomplete="email" id="email" name="email" />
-	<label for="password">Password</label>
-	<input
-		class="input"
-		autocomplete="current-password"
-		id="password"
-		name="password"
-		type="password"
-	/>
-	<label for="confirm-password">Confirm Password</label>
-	<input
-		class="input"
-		autocomplete="current-password"
-		id="confirm-password"
-		name="confirm-password"
-		type="password"
-	/>
 	{#if form?.message !== undefined}
 		<div class="{form?.success ? 'text-green-500' : 'text-red-600'} col-span-2">
 			{form?.message}
 		</div>
 	{/if}
-	<!-- Social login -->
-	<div class="col-span-2 justify-self-center gap-x-2 gap-y-0.5 grid grid-cols-2 justify-items-stretch">
-		<div class="col-span-2 flex items-center gap-2 after:grow after:hr before:grow before:hr hr-2 w-full">
-			Or
-		</div>
-		<button class="btn" type="button" onclick={() => socialLogin('azure')}>
-			<i class="fa-brands fa-microsoft"></i>
-			Login with Microsoft
-		</button>
-		<button class="btn" type="button" onclick={() => socialLogin('github')}>
-			<i class="fa-brands fa-github"></i>
-			Login with Github
-		</button>
-		{#if social_login_error}
-			<div class="text-red-600 col-span-2">{social_login_error}</div>
-		{/if}
-	</div>
 	<div class="col-span-2" bind:this={hcaptcha_element}>Loading hCaptcha...</div>
-	<button class="btn col-span-2" type="submit" disabled={loading}>Register</button>
-	<div class="col-span-2">
-		Already have an account? <a class="link" href="/auth/login">Login here</a>.
-	</div>
+	<button class="btn col-span-2" type="submit" disabled={loading}>Reset Password</button>
 </form>

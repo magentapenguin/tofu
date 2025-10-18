@@ -20,6 +20,7 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<script src="https://kit.fontawesome.com/2de8bdc654.js" crossorigin="anonymous" data-auto-replace-svg="nest"></script>
 </svelte:head>
 
 {@render children?.()}

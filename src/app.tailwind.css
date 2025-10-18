@@ -28,29 +28,14 @@
     .input {
         @apply p-1 px-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-emerald-500 focus:outline-2 focus:outline-offset-0 focus:ring-0;
     }
-    .icon {
-        @apply align-[-0.25em] inline-block fill-current icon-auto;
-    }
     .dropdown-menu {
-        @apply absolute bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded shadow-lg mt-1 min-w-[8rem] z-10 flex flex-col;
+        @apply absolute bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded shadow-lg mt-1 min-w-[8rem] z-10 flex flex-col;
     }
     .dropdown-item {
         @apply p-2 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer text-left;
     }
 }
 
-@utility icon-auto {
-    height: 1em;
-    width: 1em;
-}
-@utility icon-h {
-    height: 1em;
-    width: auto;
-}
-@utility icon-w {
-    height: auto;
-    width: 1em;
-}
 @utility hr {
     content: "";
     display: block;
@@ -61,8 +46,4 @@
 
 @utility hr-* {
     --tw-hr-size: calc(1px * --value(integer, [integer]));
-}
-
-@utility icon-* {
-    font-size: calc(var(--spacing) * --value(integer, [integer]));
 }
