@@ -31,8 +31,11 @@
     .icon {
         @apply align-[-0.25em] inline-block fill-current icon-auto;
     }
-    .hr {
-        @apply border-b border-gray-300 dark:border-gray-700;
+    .dropdown-menu {
+        @apply absolute bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded shadow-lg mt-1 min-w-[8rem] z-10 flex flex-col;
+    }
+    .dropdown-item {
+        @apply p-2 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer text-left;
     }
 }
 
@@ -47,6 +50,17 @@
 @utility icon-w {
     height: auto;
     width: 1em;
+}
+@utility hr {
+    content: "";
+    display: block;
+    height: var(--tw-hr-size, 1px);
+    background-color: currentColor;
+    opacity: 0.2;
+}
+
+@utility hr-* {
+    --tw-hr-size: calc(1px * --value(integer, [integer]));
 }
 
 @utility icon-* {

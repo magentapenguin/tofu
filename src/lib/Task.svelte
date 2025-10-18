@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { supabase } from "./db";
+    import { offset, flip, shift, autoUpdate, computePosition } from '@floating-ui/dom';
     interface Props {
         id: string;
         title: string;
@@ -7,15 +7,30 @@
         due?: string;
         completed?: boolean;
         syncing?: boolean;
-        onDelete?: () => void;
-        onChange?: (completed: boolean) => void;
+        onDelete?: ({id}: {id: string}) => void;
+        onChange?: ({completed, id}: {completed: boolean, id: string}) => void;
+        onModify?: ({title, description, due, id}: {title: string, description?: string, due?: string, id: string}) => void;
     }
-    let { id, title, description, due, syncing = false, onDelete, onChange }: Props = $props();
-    let completed = $state(false);
+    let { id, title, description, completed: done, due, syncing = false, onDelete, onChange, onModify }: Props = $props();
+    let completed = $state(done ?? false);
+    let editing = $state(false);
+    let showMenu = $state(false);
+    let menu: HTMLDivElement;
     function toggleCompleted() {
         completed = !completed;
-        onChange?.(completed);
+        onChange?.({completed, id});
     }
+    function showActions() {
+        showMenu = !showMenu;
+        console.log(menu, showMenu);
+    }
+    function startEditing() {
+        editing = true;
+    }
+    function stopEditing() {
+        editing = false;
+    }
+    
 </script>
 <div class="p-4 border border-gray-200 dark:border-gray-800 rounded-lg mb-4 bg-white dark:bg-gray-900 shadow-sm grid gap-1 gap-x-3" style="grid-template-columns: auto 1fr auto; grid-template-rows: auto auto; grid-template-areas: 'checkbox title actions' 'description description actions';">
     <button class="{!completed ? "border-2 border-gray-400 dark:border-gray-600" : "bg-emerald-500 shadow-emerald-400 [box-shadow:0_1px_1px_0_inset_var(--tw-shadow-color)]"} size-8 rounded-md not-disabled:cursor-pointer self-center [grid-area:checkbox]"
@@ -33,11 +48,27 @@
             <div class="icon icon-6 select-none" aria-hidden="true">&nbsp;</div>
         {/if}
     </button>
-    <h3 class="text-lg font-medium hr [grid-area:title]">{title}</h3>
+    <h3 class="text-lg font-medium hr [grid-area:title]">
+        {#if editing}
+            <input type="text" bind:value={title} class="border-b border-gray-300 dark:border-gray-700 bg-transparent focus:outline-none w-full" />
+        {:else}
+            {title}
+        {/if}
+    </h3>
     <p class="text-gray-500 dark:text-gray-400 [grid-area:description]">{description}</p>
-    <button class="sidebar-btn self-stretch justify-self-end [grid-area:actions]">
+    <button class="sidebar-btn self-stretch justify-self-end [grid-area:actions]" onclick={showActions} aria-haspopup="true" aria-expanded={showMenu}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512" class="icon icon-h icon-6 self-center">
             <!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M64 144a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0 224c30.9 0 56 25.1 56 56s-25.1 56-56 56-56-25.1-56-56 25.1-56 56-56zm56-112c0 30.9-25.1 56-56 56s-56-25.1-56-56 25.1-56 56-56 56 25.1 56 56z"/>
         </svg>
     </button>
+    <div bind:this={menu} class="dropdown-menu" hidden={!showMenu}>
+        {#if editing}
+            <button class="dropdown-item" onclick={stopEditing}>Stop Editing</button>
+        {:else}
+            <button class="dropdown-item" onclick={startEditing}>Edit</button>
+        {/if}
+        {#if onDelete}
+            <button class="dropdown-item text-red-600" onclick={() => onDelete?.({id})}>Delete</button>
+        {/if}
+    </div>
 </div>
