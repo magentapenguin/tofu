@@ -21,13 +21,13 @@ Sentry.init({
 	integrations: [replayIntegration(), Sentry.feedbackIntegration({
       // Additional SDK configuration goes in here, for example:
       colorScheme: "system",
-    }),beforeSend(event, hint) {
+    }),],beforeSend(event, hint) {
       // Check if it is an exception, and if so, show the report dialog
       if (event.exception && event.event_id) {
         Sentry.showReportDialog({ eventId: event.event_id });
       }
       return event;
-    },]
+    },
 });
 
 // If you have a custom error handler, pass it to `handleErrorWithSentry`
