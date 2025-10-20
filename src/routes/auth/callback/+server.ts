@@ -18,6 +18,7 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
             redirectTo.searchParams.delete('next')
             redirect(303, redirectTo)
         }
+        
     }
     redirectTo.pathname = '/auth/error'
     redirect(303, redirectTo)

@@ -4,6 +4,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
+    import { browser } from '$app/environment'
 
 	let { data, children } = $props();
 	let { session, supabase } = $derived(data);
@@ -17,11 +18,13 @@
 
 		return () => data.subscription.unsubscribe();
 	});
-	posthog.init('phc_CbHOw79fze405aeNYJKiCPEb8jLqujU2zKKWWRHdpR9', {
-        api_host: 'https://us.i.posthog.com',
-        defaults: '2025-05-24',
-        person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
-    });
+	if (browser) {
+		posthog.init('phc_CbHOw79fze405aeNYJKiCPEb8jLqujU2zKKWWRHdpR9', {
+			api_host: 'https://us.i.posthog.com',
+			defaults: '2025-05-24',
+			person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
+		});
+	}
 </script>
 
 <svelte:head>

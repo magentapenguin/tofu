@@ -51,6 +51,7 @@
 	};
 	let social_login_error = $state<string | null>(null);
 	async function socialLogin(provider: string) {
+		posthog.capture('social-login-attempt', { provider });
 		const response = await fetch('/auth/login/social', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
