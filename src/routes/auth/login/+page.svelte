@@ -5,6 +5,8 @@
 	import posthog from 'posthog-js';
 	import type { ActionData, SubmitFunction } from './$types';
 	import { hCaptchaLoader } from '@hcaptcha/loader';
+    import { goto } from '$app/navigation'
+    import { browser } from '$app/environment'
 
 	let promise = hCaptchaLoader({ sentry: false });
 	let hcaptcha_element: HTMLElement | undefined = $state();
@@ -59,10 +61,14 @@
 		});	
 		if (response.ok) {
 			const data = await response.json();
-			window.location.href = data.url;
+			window.location.replace(data.url);
 		} else {
 			const errorData = await response.json();
-			social_login_error = errorData.message;
+			posthog.capture('social-login-failed', { provider, error: errorData.name, message: errorData.message });
+			let url = new URL('/auth/error', window.location.href);
+			url.searchParams.set('error', errorData.name);
+			url.searchParams.set('error_description', errorData.message);
+			goto(url);
 		}
 	}
 
@@ -107,7 +113,11 @@
 	</div>
 
 	<div class="col-span-2" bind:this={hcaptcha_element}>Loading...</div>
-	<button class="btn col-span-2" type="submit" disabled={loading}>Login</button>
+	<button class="btn col-span-2" type="submit" disabled={loading}>
+		{#if loading}
+			<i class="fa-solid fa-spinner fa-spin"></i>
+		{/if}
+		Login</button>
 	<div class="col-span-2">
 		Don't have an account? <a class="link" href="/auth/register">Register here</a>.
 	</div>

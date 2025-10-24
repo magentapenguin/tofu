@@ -20,7 +20,8 @@
 	});
 	if (browser) {
 		posthog.init('phc_CbHOw79fze405aeNYJKiCPEb8jLqujU2zKKWWRHdpR9', {
-			api_host: 'https://us.i.posthog.com',
+			api_host: '/relay-7f73',
+			ui_host: 'https://us.posthog.com',
 			defaults: '2025-05-24',
 			person_profiles: 'identified_only', // or 'always' to create profiles for anonymous users as well
 		});

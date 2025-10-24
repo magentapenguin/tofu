@@ -5,6 +5,7 @@
 	import posthog from 'posthog-js';
 	import type { ActionData, SubmitFunction } from './$types';
 	import { hCaptchaLoader } from '@hcaptcha/loader';
+	import { goto } from '$app/navigation'
 
 	let promise = hCaptchaLoader({ sentry: false });
 	let hcaptcha_element: HTMLElement | undefined = $state();
@@ -16,14 +17,14 @@
 				hcaptcha.render(hcaptcha_element!, {
 					sitekey: PUBLIC_HCAPTCHA_SITEKEY,
 					theme: 'dark',
-					"error-callback": () => {
-						posthog.capture('captcha-failed')
+					'error-callback': () => {
+						posthog.capture('captcha-failed');
 					},
-					"expired-callback": () => {
-						posthog.capture('captcha-expired')
+					'expired-callback': () => {
+						posthog.capture('captcha-expired');
 					},
 					callback: (token: string) => {
-						posthog.capture('captcha-success')
+						posthog.capture('captcha-success');
 					}
 				});
 			})
@@ -59,12 +60,17 @@
 		});	
 		if (response.ok) {
 			const data = await response.json();
-			window.location.href = data.url;
+			window.location.replace(data.url);
 		} else {
 			const errorData = await response.json();
-			social_login_error = errorData.message;
+			posthog.capture('social-login-failed', { provider, error: errorData.name, message: errorData.message });
+			let url = new URL('/auth/error', window.location.href);
+			url.searchParams.set('error', errorData.name);
+			url.searchParams.set('error_description', errorData.message);
+			goto(url);
 		}
 	}
+
 </script>
 
 <form

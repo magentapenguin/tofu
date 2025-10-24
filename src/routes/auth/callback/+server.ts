@@ -17,9 +17,15 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
         if (!error) {
             redirectTo.searchParams.delete('next')
             redirect(303, redirectTo)
+        } else {
+            redirectTo.pathname = '/auth/error'
+            redirectTo.searchParams.set('error', error.name)
+            redirectTo.searchParams.set('error_description', error.message)
+            redirect(303, redirectTo)
         }
-        
     }
     redirectTo.pathname = '/auth/error'
+    redirectTo.searchParams.set('error', 'no_code')
+    redirectTo.searchParams.set('error_description', 'No code provided')
     redirect(303, redirectTo)
 }

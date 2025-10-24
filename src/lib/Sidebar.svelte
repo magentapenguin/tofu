@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto, pushState } from '$app/navigation';
+    import { page } from '$app/state'
 
 	function handleClick(event: MouseEvent) {
 		const target = event.currentTarget as HTMLButtonElement;
@@ -14,16 +15,16 @@
 </script>
 
 <div class="sidebar">
-	<button class="sidebar-btn" onclick={newTask}>
+	<button class="sidebar-btn" onclick={newTask} data-active={page.url.pathname === '/user/tasks' && page.state?.new}>
 		<i class="fa-solid fa-circle-plus"></i>
 		New Task
 	</button>
 	<hr class="hr border-gray-500/30" />
-	<button class="sidebar-btn" data-href="/user/schedule" onclick={handleClick}>
+	<button class="sidebar-btn" data-href="/user/schedule" onclick={handleClick} data-active={page.url.pathname === '/user/schedule'}>
 		<i class="fa-solid fa-calendar"></i>
 		Schedule
 	</button>
-	<button class="sidebar-btn" data-href="/user/tasks" onclick={handleClick}>
+	<button class="sidebar-btn" data-href="/user/tasks" onclick={handleClick} data-active={page.url.pathname === '/user/tasks'}>
 		<i class="fa-solid fa-list-check"></i>
 		Tasks
 	</button>
