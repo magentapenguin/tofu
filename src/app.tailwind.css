@@ -17,19 +17,19 @@
         @apply hover:bg-emerald-500/10 hover:text-emerald-700 hover:dark:text-emerald-400 p-1 px-2 text-[1.05rem] rounded text-left cursor-pointer text-gray-800 dark:text-gray-200 font-medium;
     }
     .sidebar-btn[data-active="true"] {
-        @apply bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-semibold;
+        @apply bg-emerald-500/5 hover:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold;
     }
     .btn {
-        @apply cursor-pointer p-1 px-2 rounded bg-emerald-500/50 not-dark:text-emerald-950 hover:bg-emerald-600 active:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50 font-medium;
+        @apply cursor-pointer p-1 px-2 rounded bg-emerald-600 dark:bg-emerald-800 text-white hover:bg-emerald-700 hover:dark:bg-emerald-700 active:bg-emerald-900 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50 font-medium;
     }
     .link {
-        @apply text-emerald-600 underline underline-offset-3 font-medium;
+        @apply text-emerald-700 dark:text-emerald-500 underline underline-offset-3 font-medium;
     }
     .input {
-        @apply p-1 px-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:outline-emerald-500 focus:outline-2 focus:outline-offset-0 focus:ring-0;
+        @apply p-1 px-2 rounded border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900/50 focus:outline-emerald-500 focus:outline-2 focus:outline-offset-0 focus:ring-0;
     }
     .dropdown-menu {
-        @apply absolute bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded shadow-lg mt-1 min-w-[8rem] z-10 flex flex-col;
+        @apply absolute bg-white dark:bg-gray-900 border border-gray-400 dark:border-gray-900 rounded shadow-lg mt-1 min-w-[8rem] z-10 flex flex-col;
     }
     .dropdown-item {
         @apply p-2 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer text-left;

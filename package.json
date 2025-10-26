@@ -34,7 +34,7 @@
 		"@sentry/sveltekit": "^10.18.0",
 		"@supabase/ssr": "^0.7.0",
 		"@supabase/supabase-js": "^2.58.0",
-		"posthog-js": "^1.273.1",
+		"posthog-js": "^1.280.1",
 		"posthog-node": "^5.10.3"
 	}
 }

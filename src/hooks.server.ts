@@ -1,9 +1,12 @@
 import * as Sentry from '@sentry/sveltekit'
 import { createServerClient } from '@supabase/ssr'
-import { type Handle, redirect } from '@sveltejs/kit'
+import { type Handle, type HandleServerError, redirect } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
 
-import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY } from '$env/static/public'
+import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY, PUBLIC_POSTHOG_KEY } from '$env/static/public'
+import { PostHog } from 'posthog-node';
+
+const posthog_client = new PostHog(PUBLIC_POSTHOG_KEY)
 
 const supabase: Handle = async ({ event, resolve }) => {
     /**
@@ -122,4 +125,9 @@ const posthog: Handle = async ({ event, resolve }) => {
 }
 
 export const handle: Handle = sequence(Sentry.sentryHandle(), sequence(supabase, authGuard, posthog))
-export const handleError = Sentry.handleErrorWithSentry()
+export const handleError = Sentry.handleErrorWithSentry(async ({ error, status }: HandleServerError) => {
+  if (status !== 404) {
+      posthog_client.captureException(error);
+      await posthog_client.shutdown();
+  }
+});

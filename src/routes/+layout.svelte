@@ -5,6 +5,7 @@
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
     import { browser } from '$app/environment'
+	import { PUBLIC_POSTHOG_KEY } from '$env/static/public'
 
 	let { data, children } = $props();
 	let { session, supabase } = $derived(data);
@@ -19,7 +20,7 @@
 		return () => data.subscription.unsubscribe();
 	});
 	if (browser) {
-		posthog.init('phc_CbHOw79fze405aeNYJKiCPEb8jLqujU2zKKWWRHdpR9', {
+		posthog.init(PUBLIC_POSTHOG_KEY, {
 			api_host: '/relay-7f73',
 			ui_host: 'https://us.posthog.com',
 			defaults: '2025-05-24',

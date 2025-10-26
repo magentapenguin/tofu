@@ -1,5 +1,6 @@
 import { handleErrorWithSentry, replayIntegration } from '@sentry/sveltekit';
 import * as Sentry from '@sentry/sveltekit';
+import posthog from 'posthog-js';
 
 Sentry.init({
 	dsn: 'https://40d5b3aa3b0848bae53236205a3b8230@o4506782055596032.ingest.us.sentry.io/4510149234130944',
@@ -21,5 +22,10 @@ Sentry.init({
 	integrations: [replayIntegration()]
 });
 
+const posthog_handler = ({ error, status }: { error: Error; status: number }) => {
+	if (status !== 404) {
+      posthog.captureException(error);
+  }
+}
 // If you have a custom error handler, pass it to `handleErrorWithSentry`
-export const handleError = handleErrorWithSentry();
+export const handleError = handleErrorWithSentry(posthog_handler);
