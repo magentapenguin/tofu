@@ -4,10 +4,10 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>%sveltekit.error.message%</title>
-		%sveltekit.head%
+		<link rel="stylesheet" href="/app.tailwind.css" />
 	</head>
 	<body data-sveltekit-preload-data="hover">
-        <h1>Oops!</h1>
+        <h1 class="text-2xl font-bold">Oops!</h1>
         <p>%sveltekit.status%</p>
         <p>%sveltekit.error.message%</p>
         <p>Please try again later.</p>

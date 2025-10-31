@@ -17,7 +17,7 @@
             due,
             id
         }: {
-            title: string
+            title?: string
             description?: string
             due?: string
             id: string
@@ -72,8 +72,19 @@
             return () => cleanup()
         }
     })
+    function handleClickOutside(event: MouseEvent) {
+        if (
+            showMenu &&
+            menu &&
+            !menu.contains(event.target as Node) &&
+            !menuAnchor.parentNode?.contains(event.target as Node)
+        ) {
+            showMenu = false
+        }
+    }
 </script>
 
+<svelte:window onclick={handleClickOutside} />
 <div
     class="p-4 border border-gray-200 dark:border-gray-800 rounded-lg mb-4 bg-white dark:bg-gray-900 shadow-sm grid gap-1 gap-x-3"
     style="grid-template-columns: auto 1fr auto; grid-template-rows: auto auto; grid-template-areas: 'checkbox title actions' 'description description actions';">
@@ -88,7 +99,7 @@
         onclick={toggleCompleted}>
         {#if syncing}
             <span class="sr-only">Syncing...</span>
-            <i class="fa-solid fa-rotate fa-spin text-gray-400 dark:text-gray-600"></i>
+            <i class="fa-solid fa-rotate fa-spin {!completed ? "text-gray-400 dark:text-gray-600" : "text-white"}"></i>
         {:else if completed}
             <span class="sr-only">Completed</span>
             <i class="fa-solid fa-check"></i>
@@ -107,7 +118,28 @@
             {title}
         {/if}
     </h3>
-    <p class="text-gray-500 dark:text-gray-400 [grid-area:description]">{description}</p>
+    <div class="text-gray-500 dark:text-gray-400 [grid-area:description]">
+        {#if editing}
+            <textarea
+                bind:value={description}
+                class="w-full border p-1 rounded border-gray-300 dark:border-gray-700"></textarea>
+            <div class="mt-2">
+                <label for="due-{id}" class="mr-2 font-semibold">Due Date:</label>
+                <input
+                    type="date"
+                    id="due-{id}"
+                    bind:value={due}
+                    class="border-b border-gray-300 dark:border-gray-700 bg-transparent focus:outline-none" />
+            </div>
+        {:else}
+            {description}
+            {#if due}
+                <div class="mt-1 text-sm text-gray-400 dark:text-gray-500">
+                    Due: {new Date(due).toLocaleDateString()}
+                </div>
+            {/if}
+        {/if}
+    </div>
     <button
         class="sidebar-btn self-stretch justify-self-end [grid-area:actions] text-lg"
         onclick={showActions}
@@ -117,20 +149,24 @@
         <span class="sr-only">Task actions</span>
     </button>
     {#if showMenu}
-        <div bind:this={menu} class="dropdown-menu" role="menu" transition:scale={{ duration: 100, easing: cubicOut }}>
+        <div
+            bind:this={menu}
+            class="dropdown-menu"
+            role="menu"
+            transition:scale={{ duration: 100, easing: cubicOut }}>
             {#if editing}
                 <button class="dropdown-item" onclick={stopEditing}>
                     <i class="fa-solid fa-pen-slash"></i>
                     Stop Editing
                 </button>
             {:else}
-                <button class="dropdown-item" onclick={startEditing}>
+                <button class="dropdown-item" onclick={startEditing} disabled={syncing}>
                     <i class="fa-solid fa-pen"></i>
                     Edit
                 </button>
             {/if}
             {#if onDelete}
-                <button class="dropdown-item text-red-600" onclick={() => onDelete?.({ id })}
+                <button class="dropdown-item text-red-600 dark:text-red-400" onclick={() => onDelete?.({ id })}
                     >Delete</button>
             {/if}
         </div>

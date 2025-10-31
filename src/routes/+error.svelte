@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+    console.error(page.error);
 </script>
 
 <div class="container p-4 absolute inset-0 flex flex-col justify-center items-center">

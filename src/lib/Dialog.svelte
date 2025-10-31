@@ -14,7 +14,7 @@
 	}
 	
 </script>
-<div class="fixed -translate-1/2 top-1/2 left-1/2 min-h-60 min-w-xl bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-2 m-5 z-50 rounded-lg" hidden={!open} role="dialog" aria-modal="true">
+<div class="fixed not-sm:inset-5 sm:-translate-1/2 sm:top-1/2 sm:left-1/2 min-h-60 sm:min-w-xl bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-2 z-50 rounded-lg" hidden={!open} role="dialog" aria-modal="true">
 	<div class="text-2xl -m-2 mb-1 p-2 bg-gray-200 dark:bg-gray-800 font-semibold rounded-t-lg">
 		{#if typeof title === 'string'}
 			{title}

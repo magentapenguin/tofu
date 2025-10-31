@@ -23,7 +23,6 @@ export const actions: Actions = {
         const formData = await request.formData()
         const password = formData.get('password') as string
         const confirmPassword = formData.get('confirm-password') as string
-        const hcaptchaToken = formData.get('h-captcha-response') as string
         // check if passwords match
         if (password !== confirmPassword) {
             return fail(400, { message: 'Passwords do not match', success: false })
@@ -32,7 +31,6 @@ export const actions: Actions = {
         if (!password) {
             return fail(400, { message: 'Password is required', success: false })
         }
-        const requestOrigin = url.origin
         const { data, error } = await supabase.auth.updateUser({ password })
         if (error || !data.user) {
             return fail(400, { message: error?.message ?? 'Update failed', success: false })

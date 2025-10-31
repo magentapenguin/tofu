@@ -125,8 +125,9 @@ const posthog: Handle = async ({ event, resolve }) => {
 }
 
 export const handle: Handle = sequence(Sentry.sentryHandle(), sequence(supabase, authGuard, posthog))
-export const handleError = Sentry.handleErrorWithSentry(async ({ error, status }: HandleServerError) => {
+export const handleError = Sentry.handleErrorWithSentry(async ({ error, status }) => {
   if (status !== 404) {
+        console.error('error:', error);
       posthog_client.captureException(error);
       await posthog_client.shutdown();
   }

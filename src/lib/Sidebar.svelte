@@ -33,4 +33,8 @@
 		<i class="fa-solid fa-left-from-bracket"></i>
 		Sign out
 	</button>
+	<button class="sidebar-btn" onclick={handleClick} data-href="/user/settings" data-active={page.url.pathname === '/user/settings'}>
+		<i class="fa-solid fa-cog"></i>
+		Settings
+	</button>
 </div>

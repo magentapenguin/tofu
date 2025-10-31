@@ -22,6 +22,9 @@
     .btn {
         @apply cursor-pointer p-1 px-2 rounded bg-emerald-600 dark:bg-emerald-800 text-white hover:bg-emerald-700 hover:dark:bg-emerald-700 active:bg-emerald-900 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50 font-medium;
     }
+    .btn-secondary {
+        @apply border border-gray-300 bg-transparent dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 disabled:border-gray-400 disabled:cursor-not-allowed disabled:opacity-50 font-medium;
+    }
     .link {
         @apply text-emerald-700 dark:text-emerald-500 underline underline-offset-3 font-medium;
     }
