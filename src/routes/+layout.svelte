@@ -32,6 +32,22 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 	<script src="https://kit.fontawesome.com/2de8bdc654.js" crossorigin="anonymous" data-auto-replace-svg="nest"></script>
+	<script lang="ts">
+		document.documentElement.classList.toggle(
+			"dark",
+			localStorage.theme === "dark" ||
+				(!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
+		);
+		addEventListener("storage", (event) => {
+			if (event.key === "theme") {
+				document.documentElement.classList.toggle(
+					"dark",
+					localStorage.theme === "dark" ||
+						(!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
+				);
+			}
+		});
+	</script>
 </svelte:head>
 
 {@render children?.()}

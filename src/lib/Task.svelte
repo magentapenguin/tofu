@@ -91,7 +91,7 @@
     <button
         class="{!completed
             ? 'border-2 border-gray-400 dark:border-gray-600'
-            : 'bg-emerald-500 shadow-emerald-400 [box-shadow:0_1px_1px_0_inset_var(--tw-shadow-color)]'} size-8 rounded-md not-disabled:cursor-pointer self-center [grid-area:checkbox]"
+            : 'bg-emerald-500 shadow-emerald-400 [box-shadow:0_1px_1px_0_inset_var(--tw-shadow-color)]'} size-8 rounded-md not-disabled:cursor-pointer self-center [grid-area:checkbox] text-white"
         disabled={syncing}
         aria-busy={syncing}
         aria-checked={completed}

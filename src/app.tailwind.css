@@ -8,6 +8,7 @@
 }
 
 @custom-variant hidden (&:where([hidden] *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer components {
     .sidebar {
