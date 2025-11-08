@@ -22,6 +22,7 @@ Sentry.init({
 	integrations: [replayIntegration()]
 });
 
+// @ts-ignore
 const posthog_handler = ({ error, status }) => {
 	if (status !== 404) {
       posthog.captureException(error);

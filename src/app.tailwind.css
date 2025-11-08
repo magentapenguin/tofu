@@ -12,10 +12,29 @@
 
 @layer components {
     .sidebar {
-        @apply p-4 bg-gray-100 dark:bg-gray-900 h-screen w-xs flex flex-col justify-stretch forced-colors:border-r gap-1;
+        @apply p-4 bg-gray-100 dark:bg-gray-900 h-screen w-xs flex flex-col justify-stretch forced-colors:border-r gap-1 overflow-y-auto overflow-x-hidden not-sm:w-md not-sm:z-10 not-sm:before:fixed not-sm:before:inset-0 not-sm:before:bg-black/20 not-sm:max-w-svw not-sm:before:pointer-events-none not-sm:before:-z-10 not-sm:fixed not-sm:top-0 not-sm:left-0 not-sm:bottom-0;
+        transition: width 0.2s ease;
+    }
+    .sidebar.collapsed {
+        @apply w-16 static before:hidden;
+    }
+    .sidebar.collapsed .sidebar-btn {
+        @apply justify-center px-1 *:not-first:opacity-0 overflow-hidden;
+    }
+    .sidebar.collapsed .sidebar-btn i {
+        @apply mr-5;
+    }
+    .sidebar-btn i {
+        transition: margin 0.2s ease;
     }
     .sidebar-btn {
-        @apply hover:bg-emerald-500/10 hover:text-emerald-700 hover:dark:text-emerald-400 p-1 px-2 text-[1.05rem] rounded text-left cursor-pointer text-gray-800 dark:text-gray-200 font-medium;
+        transition: padding 0.2s ease;
+        @apply hover:bg-emerald-500/10 hover:text-emerald-700 hover:dark:text-emerald-400 p-1 px-2 text-[1.05rem] rounded text-left cursor-pointer text-gray-800 dark:text-gray-200 font-medium text-nowrap;
+        @variant * {
+            @variant not-first {
+                transition: opacity 0.2s ease;
+            }
+        }
     }
     .sidebar-btn[data-active="true"] {
         @apply bg-emerald-500/5 hover:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold;

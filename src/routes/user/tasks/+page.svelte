@@ -87,7 +87,7 @@
 				name: tasks.find(task => task.id === id)?.title,
 				desc: tasks.find(task => task.id === id)?.description,
 				expiry: due,
-				selected: tasks.find(task => task.id === id)?.completed
+				selected: (tasks.find(task => task.id === id)?.completed ?? false) ? 'TRUE' : 'FALSE'
 			})
 			.eq('id', id)
 			.then(({ error }) => {
