@@ -24,13 +24,23 @@
 
     type AnySetting = SelectSetting | BooleanSetting | TextSetting
 
+    let currentTheme = 'System Default'
+    if (typeof localStorage !== 'undefined') {
+        const storedTheme = localStorage.getItem('theme')
+        if (storedTheme === 'light') {
+            currentTheme = 'Light'
+        } else if (storedTheme === 'dark') {
+            currentTheme = 'Dark'
+        }
+    }
+
     const settings: AnySetting[] = [
         {
             name: 'Theme',
             type: 'select',
             description: 'Choose the application theme.',
             options: ['Light', 'Dark', 'System Default'],
-            value: 'System Default',
+            value: currentTheme,
             onChange: (oldValue: string, newValue: string) => {
                 if (newValue === 'Light') {
                     localStorage.setItem('theme', 'light')
@@ -47,24 +57,28 @@
             description: 'Your username in the application.',
             value: page.data.session?.user.user_metadata.user_name ?? page.data.session?.user.email ?? '',
             onChange: (oldValue: string, newValue: string) => {
-                
+                supabase.auth.updateUser({
+                    data: { user_name: newValue }
+                }).then(({ error }) => {
+                    if (error) {
+                        alert('Error updating username: ' + error.message)
+                    }
+                })
             }
         }
     ]
 </script>
 
 {#each settings as setting}
-    <div class="p-4 border border-gray-200 dark:border-gray-800 rounded-lg mb-4 bg-white dark:bg-gray-900 shadow-sm grid gap-1 gap-x-3"
-    style="grid-template-columns: auto 1fr auto; grid-template-rows: auto auto; grid-template-areas: 'title setting' 'description setting';">
-        <strong style="grid-area: title;" class="text-lg">{setting.name}</strong>
-        <div style="grid-area: description;">
+    <div class="p-4 border border-gray-200 dark:border-gray-800 rounded-lg mb-4 bg-white dark:bg-gray-900 shadow-sm flex gap-1 flex-col">
+        <strong class="text-lg">{setting.name}</strong>
+        <div>
             {setting.description}
         </div>
         {#if setting.type === 'select'}
             <select
                 bind:value={setting.value}
-                class="input self-center justify-self-center p-3"
-                style="grid-area: setting;"
+                class="input"
                 onchange={(e) => {
                     const oldValue = setting.value
                     const newValue = (e.target as HTMLSelectElement).value
@@ -79,8 +93,6 @@
         {:else if setting.type === 'boolean'}
             <input
                 type="checkbox"
-                style="grid-area: setting;"
-                class="p-3"
                 bind:checked={setting.value}
                 onchange={(e) => {
                     const oldValue = setting.value
@@ -92,8 +104,7 @@
         {:else if setting.type === 'text'}
             <input
                 type="text"
-                class="input self-center justify-self-center p-3"
-                style="grid-area: setting;"
+                class="input self-center justify-self-center"
                 bind:value={setting.value}
                 oninput={(e) => {
                     const oldValue = setting.value

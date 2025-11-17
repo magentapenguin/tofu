@@ -8,6 +8,9 @@ const config = {
 	preprocess: vitePreprocess(),
 	kit: {
 		adapter: adapter(),
+		version: {
+			name: process.env.RENDER_GIT_COMMIT ?? 'dev',
+		},
 
 		experimental: {
 			tracing: {

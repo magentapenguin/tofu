@@ -38,7 +38,7 @@
 			localStorage.theme === "dark" ||
 				(!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
 		);
-		addEventListener("storage", (event) => {
+		window.addEventListener("storage", (event) => {
 			if (event.key === "theme") {
 				document.documentElement.classList.toggle(
 					"dark",

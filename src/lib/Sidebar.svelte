@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { goto, pushState } from '$app/navigation';
+	import { goto, beforeNavigate, afterNavigate } from '$app/navigation';
     import { page } from '$app/state'
+    import { onMount } from 'svelte'
+	
 
 	function handleClick(event: MouseEvent) {
 		const target = event.currentTarget as HTMLButtonElement;
@@ -12,30 +14,36 @@
 	function newTask(event: MouseEvent) {
 		goto('/user/tasks', { state: { new: true } });
 	}
+	let sidebar: HTMLElement;
 	function toggleSidebar() {
-		const sidebar = document.querySelector('.sidebar');
 		if (sidebar) {
-			sidebar.classList.toggle('collapsed');
+			sessionStorage.setItem('sidebar-collapsed', sidebar.classList.toggle('collapsed') ? 'true' : 'false');
 		}
 	}
-	function onResize() {
-		const sidebar = document.querySelector('.sidebar');
-		if (window.innerWidth < 4*16) {
-			sidebar?.classList.add('collapsed');
-		} else {
-			sidebar?.classList.remove('collapsed');
+	onMount(() => {
+		const collapsed = sessionStorage.getItem('sidebar-collapsed');
+		if (collapsed === 'true') {
+			if (sidebar) {
+				sidebar.classList.add('collapsed');
+			}
 		}
-	}
+	});
+	afterNavigate(() => {
+		if (matchMedia('(max-width: 640px)').matches && sidebar) {
+			sidebar.classList.add('collapsed');
+		}
+		console.log('navigating, collapsing sidebar');
+	});
 </script>
 
-<svelte:window onresize={onResize}></svelte:window>
+<div class="sm:hidden fixed inset-0 bg-black/50 z-10 sidebar-cover"></div>
 
-<div class="sidebar">
+<div class="sidebar" bind:this={sidebar}>
 	<button class="sidebar-btn" onclick={newTask} data-active={page.url.pathname === '/user/tasks' && page.state?.new}>
 		<i class="fa-solid fa-circle-plus"></i>
 		<span>New Task</span>
 	</button>
-	<hr class="hr border-gray-500/30" />
+	<hr class="hr text-gray-500/30 colorful:text-white/30" />
 	<button class="sidebar-btn" data-href="/user/schedule" onclick={handleClick} data-active={page.url.pathname === '/user/schedule'}>
 		<i class="fa-solid fa-calendar"></i>
 		<span>Schedule</span>
@@ -45,7 +53,7 @@
 		<span>Tasks</span>
 	</button>
 	<div class="flex-grow"></div>
-	<button class="sidebar-btn hover:bg-red-500/10 hover:text-red-700 hover:dark:text-red-400" data-href="/user/logout" onclick={handleClick}>
+	<button class="sidebar-btn hover:bg-red-500/10 hover:text-red-700 hover:dark:text-red-400 colorful:hover:bg-red-500/30 colorful:hover:text-red-950 colorful:hover:dark:text-red-200" data-href="/user/logout" onclick={handleClick}>
 		<i class="fa-solid fa-left-from-bracket"></i>
 		<span>Sign out</span>
 	</button>

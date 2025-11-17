@@ -23,9 +23,12 @@
 		title: task.name,
 		description: task.desc,
 		due: task.expiry ?? undefined,
-		completed: task.selected,
+		completed: Boolean(task.selected),
 		syncing: false
 	}));
+	$effect(() => {
+		console.log(typeof tasks[0].completed);
+	});	
 
 	function taskOnModify({ title, description, due, id }: { title?: string; description?: string; due?: string; id: string }) {
 		console.log('Task modified:', { id, title, description, due });
@@ -58,6 +61,13 @@
 	}
 
 	function syncTask({ id }: { id: string }) {
+		const taskToSync = tasks.find(task => task.id === id);
+		if (!taskToSync) {
+			console.error('Task not found:', id);
+			return;
+		}
+		console.log(tasks, id);
+
 		tasks = tasks.map(task => {
 			if (task.id === id) {
 				return {
@@ -70,7 +80,7 @@
 		syncing_tasks.add(id);
 		// Sync with supabase
 
-		let due = tasks.find(task => task.id === id)?.due as string | null | undefined;
+		let due = taskToSync.due as string | null | undefined;
 		if (due === undefined) {
 			due = null;
 		} else if (due) {
@@ -84,17 +94,19 @@
 		supabase
 			.from('tasks')
 			.update({
-				name: tasks.find(task => task.id === id)?.title,
-				desc: tasks.find(task => task.id === id)?.description,
+				name: taskToSync.title,
+				desc: taskToSync.description,
 				expiry: due,
-				selected: (tasks.find(task => task.id === id)?.completed ?? false) ? 'TRUE' : 'FALSE'
+				selected: Boolean(taskToSync.completed),
 			})
 			.eq('id', id)
-			.then(({ error }) => {
+			.select()
+			.then(({ error, data }) => {
 				if (error) {
 					console.error('Error syncing task:', error.message);
 					posthog.captureException(error);
 				}
+				console.log('Task synced:', data);
 				tasks = tasks.map(task => {
 					if (task.id === id) {
 						return {

@@ -132,7 +132,7 @@
                     class="border-b border-gray-300 dark:border-gray-700 bg-transparent focus:outline-none" />
             </div>
         {:else}
-            {description}
+            <p class="text-wrap max-w-full">{description}</p>
             {#if due}
                 <div class="mt-1 text-sm text-gray-400 dark:text-gray-500">
                     Due: {new Date(due).toLocaleDateString()}
