@@ -25,20 +25,41 @@
     }
     let {
         id,
-        title,
-        description,
+        title: initialTitle,
+        description: initialDescription,
         completed: done,
-        due,
+        due: initialDue,
         syncing = false,
         onDelete,
         onChange,
         onModify
     }: Props = $props()
     let completed = $state(done ?? false)
+    let title = $state(initialTitle)
+    let description = $state(initialDescription)
+    let due = $state(initialDue)
     let editing = $state(false)
     let showMenu = $state(false)
     let menu: HTMLDivElement | undefined = $state()
     let menuAnchor: Element
+    
+    // Sync local state with prop changes
+    $effect(() => {
+        completed = done ?? false
+    })
+    
+    $effect(() => {
+        title = initialTitle
+    })
+    
+    $effect(() => {
+        description = initialDescription
+    })
+    
+    $effect(() => {
+        due = initialDue
+    })
+    
     function toggleCompleted() {
         completed = !completed
         onChange?.({ completed, id })
@@ -49,10 +70,17 @@
     }
     function startEditing() {
         editing = true
+        showMenu = false
     }
     function stopEditing() {
         editing = false
+        showMenu = false
         onModify?.({ title, description, due, id })
+    }
+    
+    function handleDelete() {
+        showMenu = false
+        onDelete?.({ id })
     }
 
     $effect(() => {
@@ -141,7 +169,7 @@
         {/if}
     </div>
     <button
-        class="sidebar-btn self-stretch justify-self-end [grid-area:actions] text-lg"
+        class="btn-transparent self-stretch justify-self-end [grid-area:actions] text-lg"
         onclick={showActions}
         aria-haspopup="true"
         aria-expanded={showMenu}>
@@ -166,8 +194,10 @@
                 </button>
             {/if}
             {#if onDelete}
-                <button class="dropdown-item text-red-600 dark:text-red-400" onclick={() => onDelete?.({ id })}
-                    >Delete</button>
+                <button class="dropdown-item text-red-600 dark:text-red-400" onclick={handleDelete} disabled={syncing}>
+                    <i class="fa-solid fa-trash"></i>
+                    Delete
+                </button>
             {/if}
         </div>
     {/if}

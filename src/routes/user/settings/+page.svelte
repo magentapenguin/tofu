@@ -1,7 +1,9 @@
 <script lang="ts">
     import { page } from "$app/state"
-    import { supabase } from "$lib/db"
+    import type { PageData } from './$types'
 
+    let { data }: { data: PageData } = $props()
+    const supabase = data.supabase
 
     interface Setting<T = any> {
         name: string
@@ -49,6 +51,11 @@
                 } else {
                     localStorage.removeItem('theme')
                 }
+                document.documentElement.classList.toggle(
+                    "dark",
+                    localStorage.theme === "dark" ||
+                        (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
+                );
             }
         },
         {
@@ -104,7 +111,7 @@
         {:else if setting.type === 'text'}
             <input
                 type="text"
-                class="input self-center justify-self-center"
+                class="input self-center justify-self-center w-full"
                 bind:value={setting.value}
                 oninput={(e) => {
                     const oldValue = setting.value

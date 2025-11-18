@@ -5,7 +5,6 @@
 	import { goto, pushState } from '$app/navigation';
 	import { enhance } from '$app/forms';
 	import type { PageProps } from './$types';
-	import { supabase } from '$lib/db';
     import posthog from 'posthog-js'
 	let tasks: Array<{
 		id: string;
@@ -18,6 +17,8 @@
 	let syncing_tasks = $state(new Set<string>());
 
 	let { form, data }: PageProps = $props();
+	const supabase = data.supabase;
+	
 	tasks = data.tasks.map(task => ({
 		id: task.id,
 		title: task.name,
@@ -102,8 +103,8 @@
 			.eq('id', id)
 			.select()
 			.then(({ error, data }) => {
-				if (error) {
-					console.error('Error syncing task:', error.message);
+				if (error || !data) {
+					console.error('Error syncing task:', error?.message);
 					posthog.captureException(error);
 				}
 				console.log('Task synced:', data);
@@ -122,15 +123,19 @@
 
 	function taskOnDelete({ id }: { id: string }) {
 		console.log('Task deleted:', id);
+		console.log('Tasks before delete:', tasks);
 		tasks = tasks.filter(task => task.id !== id);
+		console.log('Tasks after delete:', tasks);
 		supabase
 			.from('tasks')
 			.delete()
 			.eq('id', id)
-			.then(({ error }) => {
+			.then(({ error, data }) => {
 				if (error) {
 					console.error('Error deleting task:', error.message);
 					posthog.captureException(error);
+				} else {
+					console.log('Task deleted from database successfully');
 				}
 			});
 	}
@@ -146,7 +151,15 @@
 				if (form?.message) {
 					console.error('Error creating task:', form.message);
 				} else if (form?.task) {
-					tasks = [form.task, ...tasks];
+					// Transform the task from DB format to component format
+					tasks = [{
+						id: form.task.id,
+						title: form.task.name,
+						description: form.task.desc,
+						due: form.task.expiry ?? undefined,
+						completed: Boolean(form.task.selected),
+						syncing: false
+					}, ...tasks];
 				}
 				update();
 				loading = false;
@@ -178,27 +191,19 @@
 		</form>
 	</Dialog>
 {/if}
-{#await Promise.resolve(tasks) }
-	<p>Loading tasks...</p>
-{:then}
-	{#if tasks.length === 0}
-		<p class="text-gray-600 dark:text-gray-400">No tasks found. Click "New Task" to create one.</p>
-	{/if}
-	{#each tasks as task (task.id)}
-		<Task
-			id={task.id}
-			title={task.title}
-			description={task.description}
-			due={task.due}
-			completed={task.completed}
-			syncing={task.syncing}
-			onChange={taskOnChange}
-			onModify={taskOnModify}
-			onDelete={taskOnDelete}
-		/>
-	{/each}
-{:catch error}
-	<p class="text-red-700 dark:text-red-400 font-semibold">
-		Error loading tasks: {error.message}
-	</p>
-{/await}
+{#if tasks.length === 0}
+	<p class="text-gray-600 dark:text-gray-400">No tasks found. Click "New Task" to create one.</p>
+{/if}
+{#each tasks as task (task.id)}
+	<Task
+		id={task.id}
+		title={task.title}
+		description={task.description}
+		due={task.due}
+		completed={task.completed}
+		syncing={task.syncing}
+		onChange={taskOnChange}
+		onModify={taskOnModify}
+		onDelete={taskOnDelete}
+	/>
+{/each}

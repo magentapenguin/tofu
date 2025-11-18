@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
         };
     }
     return {
-        tasks: tasks || []
+        tasks: tasks ?? []
     };
 };
 

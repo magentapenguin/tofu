@@ -13,7 +13,7 @@
 
 @layer components {
     .sidebar {
-        @apply p-4 bg-gray-100 dark:bg-gray-900 h-screen w-xs flex flex-col justify-stretch forced-colors:border-r gap-1 overflow-y-auto overflow-x-hidden not-sm:w-[min(var(--container-md),100svw)] not-sm:z-10 not-sm:fixed not-sm:top-0 not-sm:left-0 not-sm:bottom-0 colorful:backdrop-blur-md colorful:bg-emerald-900 colorful:dark:bg-emerald-800/70 colorful:forced-colors:border-r-2 colorful:forced-colors:border-emerald-700 colorful:shadow-lg;
+        @apply p-4 bg-gray-100 dark:bg-gray-900 h-screen w-xs flex flex-col justify-stretch forced-colors:border-r gap-1 overflow-y-auto overflow-x-hidden not-sm:w-[min(var(--container-md),100svw)] not-sm:z-10 fixed sm:sticky top-0 left-0 bottom-0 colorful:backdrop-blur-md colorful:bg-emerald-900 colorful:dark:bg-emerald-800/70 colorful:forced-colors:border-r-2 colorful:forced-colors:border-emerald-700 colorful:shadow-lg;
         transition: width 0.2s ease;
     }
     .sidebar.collapsed {
@@ -41,13 +41,16 @@
         }
     }
     .sidebar-btn[data-active="true"] {
-        @apply bg-emerald-500/5 hover:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold colorful:bg-white/90 colorful:hover:bg-white colorful:dark:bg-gray-200/10 colorful:text-emerald-700 colorful:dark:text-gray-300;
+        @apply bg-emerald-500/5 hover:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-semibold colorful:bg-white/90 colorful:hover:bg-white colorful:dark:bg-gray-200/10 colorful:text-emerald-700 colorful:dark:text-gray-300 colorful:dark:hover:bg-gray-200/20;
     }
     .btn {
         @apply cursor-pointer p-1 px-2 rounded bg-emerald-600 dark:bg-emerald-800 text-white hover:bg-emerald-700 hover:dark:bg-emerald-700 active:bg-emerald-900 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50 font-medium;
     }
     .btn-secondary {
         @apply border border-gray-300 bg-transparent dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 active:bg-gray-200 dark:active:bg-gray-700 disabled:border-gray-400 disabled:cursor-not-allowed disabled:opacity-50 font-medium;
+    }
+    .btn-transparent {
+        @apply hover:bg-emerald-500/10 hover:text-emerald-700 hover:dark:text-emerald-400 p-1 px-2 rounded text-left cursor-pointer text-gray-800 dark:text-gray-200 font-medium;
     }
     .link {
         @apply text-emerald-700 dark:text-emerald-500 underline underline-offset-3 font-medium;

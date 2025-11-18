@@ -42,9 +42,15 @@
 			if (event.key === "theme") {
 				document.documentElement.classList.toggle(
 					"dark",
-					localStorage.theme === "dark" ||
+					event.newValue === "dark" ||
 						(!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
 				);
+			}
+		});
+		const media_query = window.matchMedia("(prefers-color-scheme: dark)");
+		media_query.addEventListener("change", (event) => {
+			if (!("theme" in localStorage)) {
+				document.documentElement.classList.toggle("dark", event.matches);
 			}
 		});
 	</script>

@@ -1,9 +1,5 @@
 {
     "servers": {
-        "Sentry": {
-            "url": "https://mcp.sentry.dev/mcp/isaac-s7/tofu",
-            "type": "http"
-        },
         "svelte-mcp": {
             "type": "stdio",
             "command": "npx",
@@ -13,17 +9,8 @@
         },
         "supabase": {
             "type": "http",
-            "url": "https://mcp.supabase.com/mcp?project_ref=hrzgybioalndbnslyrxj",
-			"headers": {"Authorization": "Bearer ${input:api-token}"},
+            "url": "https://mcp.supabase.com/mcp?project_ref=hrzgybioalndbnslyrxj"
 		}
 	},
-	"inputs": [
-		{
-			"id": "api-token",
-			"type": "promptString",
-			"description": "Supabase PAT Token",
-			"default": "",
-			"password": true
-		}
-	]
+	"inputs": []
 }

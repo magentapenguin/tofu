@@ -18,6 +18,7 @@ export const GET: RequestHandler = async ({ url, locals: { supabase } }) => {
             redirectTo.searchParams.delete('next')
             redirect(303, redirectTo)
         } else {
+            console.error('Error during auth callback:', error.message)
             redirectTo.pathname = '/auth/error'
             redirectTo.searchParams.set('error', error.name)
             redirectTo.searchParams.set('error_description', error.message)
