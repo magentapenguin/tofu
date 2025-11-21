@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/sveltekit'
 import { createServerClient } from '@supabase/ssr'
-import { type Handle, type HandleServerError, redirect } from '@sveltejs/kit'
+import { type Handle, redirect } from '@sveltejs/kit'
 import { sequence } from '@sveltejs/kit/hooks'
 
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_PUBLISHABLE_KEY, PUBLIC_POSTHOG_KEY } from '$env/static/public'
