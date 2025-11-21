@@ -13,7 +13,7 @@
 
 @layer components {
     .sidebar {
-        @apply p-4 bg-gray-100 dark:bg-gray-900 h-screen w-xs flex flex-col justify-stretch forced-colors:border-r gap-1 overflow-y-auto overflow-x-hidden not-sm:w-[min(var(--container-md),100svw)] not-sm:z-10 fixed sm:sticky top-0 left-0 bottom-0 colorful:backdrop-blur-md colorful:bg-emerald-900 colorful:dark:bg-emerald-800/70 colorful:forced-colors:border-r-2 colorful:forced-colors:border-emerald-700 colorful:shadow-lg;
+        @apply p-4 bg-gray-100 dark:bg-gray-900 h-screen w-xs flex flex-col justify-stretch forced-colors:border-r gap-1 overflow-y-auto overflow-x-hidden not-sm:w-[min(var(--container-md),100svw)] not-sm:z-10 fixed sm:sticky top-0 left-0 bottom-0 colorful:backdrop-blur-md colorful:bg-emerald-800 colorful:dark:bg-emerald-800/70 colorful:forced-colors:border-r-2 colorful:forced-colors:border-emerald-700 colorful:shadow-lg;
         transition: width 0.2s ease;
     }
     .sidebar.collapsed {
@@ -33,7 +33,7 @@
     }
     .sidebar-btn {
         transition: padding 0.2s ease;
-        @apply hover:bg-emerald-500/10 hover:text-emerald-700 hover:dark:text-emerald-400 p-1 px-2 text-[1.05rem] rounded text-left cursor-pointer text-gray-800 dark:text-gray-200 font-medium text-nowrap colorful:hover:bg-emerald-100/20 colorful:hover:dark:bg-emerald-700/20 colorful:not-dark:text-white;
+        @apply hover:bg-emerald-500/10 hover:text-emerald-700 hover:dark:text-emerald-400 p-1 px-2 text-[1.05rem] rounded text-left cursor-pointer text-gray-800 dark:text-gray-200 font-medium text-nowrap colorful:hover:bg-emerald-100/10 colorful:hover:not-dark:text-white colorful:hover:dark:bg-emerald-700/20 colorful:not-dark:text-white;
         @variant * {
             @variant not-first {
                 transition: opacity 0.2s ease;

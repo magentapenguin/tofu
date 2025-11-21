@@ -53,7 +53,7 @@
 		<span>Tasks</span>
 	</button>
 	<div class="flex-grow"></div>
-	<button class="sidebar-btn hover:bg-red-500/10 hover:text-red-700 hover:dark:text-red-400 colorful:hover:bg-red-500/30 colorful:hover:text-red-950 colorful:hover:dark:text-red-200" data-href="/user/logout" onclick={handleClick}>
+	<button class="sidebar-btn hover:bg-red-500/10 hover:text-red-700 hover:dark:text-red-400 colorful:hover:bg-red-500/40 colorful:hover:text-white colorful:hover:dark:text-red-200" data-href="/user/logout" onclick={handleClick}>
 		<i class="fa-solid fa-left-from-bracket"></i>
 		<span>Sign out</span>
 	</button>
