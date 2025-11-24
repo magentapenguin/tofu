@@ -1,26 +1,4 @@
 import type { Actions } from './$types';
-import type { PageServerLoad } from './$types';
-
-export const load: PageServerLoad = async ({ locals: { supabase, user } }) => {
-    if (!user) {
-        console.error('No user found in load function (This should never happen)');
-    }
-    const { data: tasks, error } = await supabase
-        .from('tasks')
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error('Error fetching tasks:', error.message);
-        return {
-            tasks: []
-        };
-    }
-    return {
-        tasks: tasks ?? []
-    };
-};
 
 export const actions: Actions = {
 	default: async (event) => {

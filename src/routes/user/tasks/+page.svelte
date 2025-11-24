@@ -6,6 +6,7 @@
 	import { enhance } from '$app/forms';
 	import type { PageProps } from './$types';
     import posthog from 'posthog-js'
+    import { onMount } from 'svelte'
 	let tasks: Array<{
 		id: string;
 		title: string;
@@ -14,19 +15,57 @@
 		completed?: boolean;
 		syncing?: boolean;
 	}> = $state([]);
+	// load tasks from cache while syncing with supabase
+
+	onMount(() => {
+		const cachedTasks = localStorage.getItem('tasks');
+		if (cachedTasks) {
+			try {
+				tasks = JSON.parse(cachedTasks);
+			} catch (error) {
+				console.error('Error parsing cached tasks:', error);
+			}
+		}
+	});
+
 	let syncing_tasks = $state(new Set<string>());
 
 	let { form, data }: PageProps = $props();
 	const supabase = data.supabase;
 	
-	tasks = data.tasks.map(task => ({
+	let tasksLoaded = new Promise<void>(resolve => {
+		supabase
+		.from('tasks')
+		.select()
+		.then(({ error, data }) => {
+			if (error || !data) {
+				console.error('Error fetching tasks:', error?.message);
+				posthog.captureException(error);
+				return;
+			}
+			console.log('Tasks fetched:', data);
+			tasks = data.map(task => ({
+				id: task.id,
+				title: task.name,
+				description: task.desc,
+				due: task.expiry ?? undefined,
+				completed: Boolean(task.selected),
+				syncing: false
+			}));
+			resolve();
+			localStorage.setItem('tasks', JSON.stringify(tasks));
+		});
+	});
+
+	
+	/*tasks = data.tasks.map(task => ({
 		id: task.id,
 		title: task.name,
 		description: task.desc,
 		due: task.expiry ?? undefined,
 		completed: Boolean(task.selected),
 		syncing: false
-	}));
+	}));*/
 	$effect(() => {
 		console.log(typeof tasks[0].completed);
 	});	
@@ -92,6 +131,7 @@
 				due = null;
 			}
 		}
+		localStorage.setItem('tasks', JSON.stringify(tasks));
 		supabase
 			.from('tasks')
 			.update({
@@ -143,7 +183,6 @@
 </script>
 
 {#if page.state.new}
-	<div>Creating new task...</div>
 	<Dialog open={true} onClose={() => pushState('',{new:false})} title="New Task">
 		<form method="post" use:enhance={() => {
 			loading = true;
@@ -177,7 +216,7 @@
 			</div>
 			<div>
 				<label for="due" class="block font-semibold mb-1">Due Date</label>
-				<input type="date" id="due" name="due" class="w-full input" />
+				<input type="datetime-local" id="due" name="due" class="w-full input" />
 			</div>
 			<div class="flex justify-end gap-2">
 				<button type="button" onclick={() => pushState('', { new: false })} class="btn btn-secondary">Cancel</button>
@@ -191,6 +230,9 @@
 		</form>
 	</Dialog>
 {/if}
+{#await tasksLoaded}
+	<p class="text-gray-600 dark:text-gray-400">Loading tasks...</p>
+{/await}
 {#if tasks.length === 0}
 	<p class="text-gray-600 dark:text-gray-400">No tasks found. Click "New Task" to create one.</p>
 {/if}

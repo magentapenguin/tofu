@@ -2,6 +2,7 @@
     import { offset, flip, shift, autoUpdate, computePosition } from '@floating-ui/dom'
     import { scale } from 'svelte/transition'
     import { cubicOut } from 'svelte/easing'
+    import { humanizeTimestamp } from '$lib'
     interface Props {
         id: string
         title: string
@@ -154,7 +155,7 @@
             <div class="mt-2">
                 <label for="due-{id}" class="mr-2 font-semibold">Due Date:</label>
                 <input
-                    type="date"
+                    type="datetime-local"
                     id="due-{id}"
                     bind:value={due}
                     class="border-b border-gray-300 dark:border-gray-700 bg-transparent focus:outline-none" />
@@ -163,7 +164,7 @@
             <p class="text-wrap max-w-full">{description}</p>
             {#if due}
                 <div class="mt-1 text-sm text-gray-400 dark:text-gray-500">
-                    Due: {new Date(due).toLocaleDateString()}
+                    Due: {humanizeTimestamp(due, true)}
                 </div>
             {/if}
         {/if}
