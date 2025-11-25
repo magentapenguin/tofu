@@ -1,6 +1,7 @@
 <script lang="ts">
     import { browser } from '$app/environment'
     import { page } from '$app/state'
+    import Footer from '$lib/Footer.svelte'
     import Sidebar from '$lib/Sidebar.svelte'
     let { children } = $props()
     import posthog from 'posthog-js'
@@ -18,7 +19,10 @@
 
 <div class="flex">
     <Sidebar />
-    <main class="container mx-auto p-4 flex-grow">
-        {@render children()}
-    </main>
+    <div class="flex-grow flex flex-col">
+        <main class="container mx-auto p-4 flex-grow">
+            {@render children()}
+        </main>
+        <Footer />
+    </div>
 </div>

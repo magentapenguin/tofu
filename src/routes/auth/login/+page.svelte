@@ -6,7 +6,7 @@
 	import type { ActionData, SubmitFunction } from './$types';
 	import { hCaptchaLoader } from '@hcaptcha/loader';
     import { goto } from '$app/navigation'
-    import { browser } from '$app/environment'
+    import Footer from '$lib/Footer.svelte'
 
 	let promise = hCaptchaLoader({ sentry: false });
 	let hcaptcha_element: HTMLElement | undefined = $state();
@@ -122,4 +122,5 @@
 	<div class="col-span-2">
 		Don't have an account? <a class="link" href="/auth/register">Register here</a>.
 	</div>
+	<Footer compact wide />
 </form>

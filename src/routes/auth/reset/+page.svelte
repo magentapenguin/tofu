@@ -5,6 +5,7 @@
 	import posthog from 'posthog-js';
 	import type { ActionData, SubmitFunction } from './$types';
 	import { hCaptchaLoader } from '@hcaptcha/loader';
+    import Footer from '$lib/Footer.svelte'
 
 	let promise = hCaptchaLoader({ sentry: false });
 	let hcaptcha_element: HTMLElement | undefined = $state();
@@ -65,4 +66,5 @@
 	{/if}
 	<div class="col-span-2" bind:this={hcaptcha_element}>Loading hCaptcha...</div>
 	<button class="btn col-span-2" type="submit" disabled={loading}>Reset Password</button>
+	<Footer compact wide />
 </form>

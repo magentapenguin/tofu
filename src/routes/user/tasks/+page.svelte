@@ -221,7 +221,7 @@
 				<input type="datetime-local" id="due" name="due" class="w-full input" />
 			</div>
 			<div class="flex justify-end gap-2">
-				<button type="button" onclick={() => pushState('', { new: false })} class="btn btn-secondary">Cancel</button>
+				<button type="button" onclick={() => pushState('', { new: false })} class="btn-secondary">Cancel</button>
 				<button type="submit" class="btn">Create</button>
 			</div>
 			{#if form?.message !== undefined}
@@ -235,6 +235,9 @@
 {#if tasks.length === 0}
 	<p class="text-gray-600 dark:text-gray-400">No tasks found. Click "New Task" to create one.</p>
 {/if}
+{#await tasksLoaded}
+	<p class="text-gray-600 dark:text-gray-400">Loading tasks...</p>
+{/await}
 {#each tasks as task (task.id)}
 	<Task
 		id={task.id}
@@ -248,6 +251,3 @@
 		onDelete={taskOnDelete}
 	/>
 {/each}
-{#await tasksLoaded}
-	<p class="text-gray-600 dark:text-gray-400">Loading tasks...</p>
-{/await}

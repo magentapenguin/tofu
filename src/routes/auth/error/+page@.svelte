@@ -1,5 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
+    import Footer from "$lib/Footer.svelte"
     import posthog  from "posthog-js";
 
     function onFeedbackSubmit(event: Event) {
@@ -27,14 +28,17 @@
     <div class="input text-wrap break-words">
         {query.get("error_description")??'No additional information provided'}
     </div>
-    {#if !expected_errors.includes(query.get("error"))}
+    {#if !expected_errors.includes(query.get("error")) && !form_submitted}
     <form class="flex flex-col" onsubmit={onFeedbackSubmit}>
         <label for="issue_report" class="mt-4 font-semibold">Please consider reporting this issue to help us improve:</label>
         <textarea id="issue_report" class="input" name="issue_report" placeholder="Describe what you were doing when the error occurred..."></textarea>
         <button type="submit" class="btn mt-2 self-start">Submit Report</button>
     </form>
+    {:else if form_submitted}
+    <div class="mt-4 text-green-500 font-semibold">Thank you for your feedback!</div>
     {/if}
     <a href="/auth/login" class="btn">Go to Login</a>
     <a href="/auth/register" class="btn">Go to Register</a>
     <a href="/" class="btn">Go to Home</a>
+    <Footer compact wide />
 </div>

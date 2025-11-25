@@ -1,6 +1,6 @@
 <script lang="ts">
     import { offset, flip, shift, autoUpdate, computePosition } from '@floating-ui/dom'
-    import { scale } from 'svelte/transition'
+    import { scale, slide } from 'svelte/transition'
     import { cubicOut } from 'svelte/easing'
     import { humanizeTimestamp } from '$lib'
     interface Props {
@@ -115,6 +115,8 @@
 
 <svelte:window onclick={handleClickOutside} />
 <div
+
+	transition:slide={{ duration: 100, easing: cubicOut, axis: 'x' }}
     class="p-4 border border-gray-200 dark:border-gray-800 rounded-lg mb-4 bg-white dark:bg-gray-900 shadow-sm grid gap-1 gap-x-3"
     style="grid-template-columns: auto 1fr auto; grid-template-rows: auto auto; grid-template-areas: 'checkbox title actions' 'description description actions';">
     <button

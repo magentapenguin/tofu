@@ -1,7 +1,9 @@
 <script lang="ts">
     import { version } from "$app/environment"
     import { onMount } from "svelte"
-    import { on } from "svelte/events"
+
+    let { compact = false, wide = false }: { compact?: boolean, wide?: boolean } = $props()
+
     function getCurrentThemeName() {
         if (typeof localStorage === 'undefined') {
             return 'Auto'
@@ -49,7 +51,7 @@
     })
     
 </script>
-<footer class="p-4 text-sm text-secondary">
+<footer class="{compact ? '' : 'p-4'} text-sm text-secondary {wide ? 'w-full flex justify-evenly col-span-full' : ''}">
     {#if version.includes("dev")}
         <span>dev</span>
     {:else}
@@ -58,6 +60,7 @@
       
     <button
         class="link-secondary"
+        type="button"
         onclick={() => {
             toggleTheme()
             currentThemeName = getCurrentThemeName()

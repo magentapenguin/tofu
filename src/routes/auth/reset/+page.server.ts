@@ -1,7 +1,6 @@
 // src/routes/+page.server.ts
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
-import { correctURL } from '$lib'
 
 export const load: PageServerLoad = async ({ url, locals: { safeGetSession } }) => {
   const { session } = await safeGetSession()
@@ -11,7 +10,7 @@ export const load: PageServerLoad = async ({ url, locals: { safeGetSession } }) 
     redirect(303, '/user')
   }
 
-  return { url: correctURL(url).origin }
+  return { url: url.origin }
 }
 
 export const actions: Actions = {
@@ -32,7 +31,7 @@ export const actions: Actions = {
         if (!validEmail) {
             return fail(400, { message: 'Invalid email address', success: false })
         }
-        const requestOrigin = correctURL(url).origin
+        const requestOrigin = url.origin
         const { error } = await supabase.auth.resetPasswordForEmail(email, { captchaToken: hcaptchaToken, redirectTo: `${requestOrigin}/user/change-password` })
         if (error) {
             return fail(400, { message: error?.message ?? 'Reset password failed', success: false })

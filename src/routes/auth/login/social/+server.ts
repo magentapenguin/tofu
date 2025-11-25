@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit'
 import type { RequestHandler } from './$types'
 import type { Provider } from '@supabase/supabase-js'
-import { correctOrigin } from '$lib'
+
 export const POST: RequestHandler = async ({ url, request, locals: { supabase } }) => {
     const clientData = await request.json()
     const provider = clientData.provider as string
@@ -14,9 +14,9 @@ export const POST: RequestHandler = async ({ url, request, locals: { supabase } 
     }
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: provider as Provider,
-        options: { redirectTo: `${correctOrigin(url)}/auth/callback`, scopes: 'email profile' }
+        options: { redirectTo: `${url.origin}/auth/callback`, scopes: 'email profile' }
     })
-    console.log(data, error, `${correctOrigin(url)}/auth/callback`)
+    console.log(data, error, `${url.origin}/auth/callback`)
     if (error) {
         return json({ message: error.message, name: error.name, success: false }, { status: 400 })
     } else if (data?.url) {
