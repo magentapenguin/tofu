@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { version } from "$app/environment"
-import { page } from "$app/state";
+    import { page } from "$app/state";
+    import Footer from "$lib/Footer.svelte"
 </script>
 
 <div class="flex flex-col min-h-screen">
@@ -18,12 +18,5 @@ import { page } from "$app/state";
             </div>
         {/if}
     </main>
-    <footer class="p-4 text-sm text-gray-500">
-        {#if version.includes("dev")}
-            <span>dev</span>
-        {:else}
-            <a href="https://github.com/magentapenguin/tofu/commit/{version}" class="link text-gray-500">{version.substring(0, 7)}</a>
-        {/if}
-        
-    </footer>
+    <Footer />
 </div>

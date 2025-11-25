@@ -157,14 +157,18 @@
                 <input
                     type="datetime-local"
                     id="due-{id}"
-                    bind:value={due}
+                    value={new Date(due ?? '').toISOString().substring(0, 16)}
+                    oninput={(e) => {
+                        const value = (e.target as HTMLInputElement).value
+                        due = value ? new Date(value).toISOString() : undefined
+                    }}
                     class="border-b border-gray-300 dark:border-gray-700 bg-transparent focus:outline-none" />
             </div>
         {:else}
             <p class="text-wrap max-w-full">{description}</p>
             {#if due}
                 <div class="mt-1 text-sm text-gray-400 dark:text-gray-500">
-                    Due: {humanizeTimestamp(due, true)}
+                    Due {humanizeTimestamp(due, true)}
                 </div>
             {/if}
         {/if}

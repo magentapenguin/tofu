@@ -84,7 +84,7 @@
         </div>
         {#if setting.type === 'select'}
             <select
-                bind:value={setting.value}
+                value={setting.value}
                 class="input"
                 onchange={(e) => {
                     const oldValue = setting.value
@@ -100,7 +100,7 @@
         {:else if setting.type === 'boolean'}
             <input
                 type="checkbox"
-                bind:checked={setting.value}
+                checked={setting.value}
                 onchange={(e) => {
                     const oldValue = setting.value
                     const newValue = (e.target as HTMLInputElement).checked
@@ -112,7 +112,7 @@
             <input
                 type="text"
                 class="input self-center justify-self-center w-full"
-                bind:value={setting.value}
+                value={setting.value}
                 oninput={(e) => {
                     const oldValue = setting.value
                     const newValue = (e.target as HTMLInputElement).value

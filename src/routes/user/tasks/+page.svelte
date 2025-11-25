@@ -7,6 +7,7 @@
 	import type { PageProps } from './$types';
     import posthog from 'posthog-js'
     import { onMount } from 'svelte'
+    import { browser } from '$app/environment'
 	let tasks: Array<{
 		id: string;
 		title: string;
@@ -53,7 +54,7 @@
 				syncing: false
 			}));
 			resolve();
-			localStorage.setItem('tasks', JSON.stringify(tasks));
+			if (browser) localStorage.setItem('tasks', JSON.stringify(tasks));
 		});
 	});
 
@@ -191,14 +192,15 @@
 					console.error('Error creating task:', form.message);
 				} else if (form?.task) {
 					// Transform the task from DB format to component format
-					tasks = [{
+					tasks.unshift({
 						id: form.task.id,
 						title: form.task.name,
 						description: form.task.desc,
 						due: form.task.expiry ?? undefined,
 						completed: Boolean(form.task.selected),
 						syncing: false
-					}, ...tasks];
+					});
+					localStorage.setItem('tasks', JSON.stringify(tasks));
 				}
 				update();
 				loading = false;
@@ -230,9 +232,6 @@
 		</form>
 	</Dialog>
 {/if}
-{#await tasksLoaded}
-	<p class="text-gray-600 dark:text-gray-400">Loading tasks...</p>
-{/await}
 {#if tasks.length === 0}
 	<p class="text-gray-600 dark:text-gray-400">No tasks found. Click "New Task" to create one.</p>
 {/if}
@@ -249,3 +248,6 @@
 		onDelete={taskOnDelete}
 	/>
 {/each}
+{#await tasksLoaded}
+	<p class="text-gray-600 dark:text-gray-400">Loading tasks...</p>
+{/await}

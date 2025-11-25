@@ -1,6 +1,7 @@
 // src/routes/+page.server.ts
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
+import { correctOrigin } from '$lib'
 
 export const load: PageServerLoad = async ({ url, locals: { safeGetSession } }) => {
   const { session } = await safeGetSession()
@@ -10,7 +11,7 @@ export const load: PageServerLoad = async ({ url, locals: { safeGetSession } }) 
     redirect(303, '/user')
   }
 
-  return { url: url.origin }
+  return { url: correctOrigin(url) }
 }
 
 export const actions: Actions = {
@@ -37,8 +38,7 @@ export const actions: Actions = {
         if (!validEmail) {
             return fail(400, { message: 'Invalid email address', success: false })
         }
-        const requestOrigin = url.origin
-        const { data, error } = await supabase.auth.signUp({ email, password, options: { captchaToken: hcaptchaToken, emailRedirectTo: `${requestOrigin}/auth/confirm` } })
+        const { data, error } = await supabase.auth.signUp({ email, password, options: { captchaToken: hcaptchaToken, emailRedirectTo: `${correctOrigin(url)}/auth/confirm` } })
         if (error || !data.user) {
             return fail(400, { message: error?.message ?? 'Registration failed', success: false })
         }
